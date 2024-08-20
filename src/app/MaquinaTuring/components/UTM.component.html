@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Máquina de Turing en JavaScript</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <form class="w-50" (ngSubmit)="Comprobar()">
+      <h1 class="text-center"><b>Máquina de Turing NO determinista (JavaScript)</b></h1>
+      <br>
+      <div class="mb-3">
+        <label for="estados" class="form-label h5">Estados (separados por comas):</label>
+        <input type="text" class="form-control w-100" id="estados">
+      </div>
+      
+      <div class="mb-3">
+        <label for="alfabeto" class="form-label h5">Alfabeto (separados por comas):</label>
+        <input type="text" class="form-control w-100" id="alfabeto">
+      </div>
+      
+      <div class="mb-3">
+        <label for="transicion" class="form-label h5">Función de transición (estado, símbolo, estado_siguiente, símbolo_escribir, dirección; separados por punto y coma):</label>
+        <input type="text" class="form-control w-100" id="transicion">
+      </div>
+      
+      <div class="mb-3">
+        <label for="estadoInicial" class="form-label h5">Estado inicial:</label>
+        <input type="text" class="form-control w-100" id="estadoInicial">
+      </div>
+      
+      <div class="mb-3">
+        <label for="estadosAceptacion" class="form-label h5">Estados de aceptación (separados por comas):</label>
+        <input type="text" class="form-control w-100" id="estadosAceptacion">
+      </div>
+      
+      <div class="mb-3">
+        <label for="cadenaEntrada" class="form-label h5">Cadena de entrada:</label>
+        <input type="text" class="form-control w-100" id="cadenaEntrada">
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="button" class="btn btn-warning" (click)="limpiar()">Limpiar</button>
+    </form>
+      <div>
+        <label for="aceptado" class="form-label h5">Aceptado o NO aceptado: </label>
+        <input type="text" class="form-control w-100" id="acw">
+      </div>
+
+    
+  </div>
+</body>
+</html>
