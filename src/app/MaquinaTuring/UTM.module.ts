@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UTMComponent } from './components/UTM.component';
 import { CommonModule } from '@angular/common';
+import { UTMComponent } from './components/UTM/UTM.component';
 
 
 @NgModule({
@@ -14,4 +14,6 @@ import { CommonModule } from '@angular/common';
     CommonModule
   ]
 })
-export class UsuariosModule { }
+export class UsuariosModule { 
+  
+}

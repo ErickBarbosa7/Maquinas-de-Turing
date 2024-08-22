@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="d-flex justify-content-center align-items-center vh-100">
-    <form class="w-50" >
+    <form class="w-50">
       <h1 class="text-center"><b>Máquina de Turing NO determinista (JavaScript)</b></h1>
       <br>
       <div class="mb-3">
@@ -41,15 +41,14 @@
         <input type="text" class="form-control w-100" id="cadenaEntrada">
       </div>
       
-      <button type="submit" class="btn btn-primary">Submit</button>
-      <button type="button" class="btn btn-warning">Limpiar</button>
-    </form>
-      <div>
-        <label for="aceptado" class="form-label h5">Aceptado o NO aceptado: </label>
-        <input type="text" class="form-control w-100" id="acw">
+      <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-warning" onclick="limpiarFormulario()">Limpiar</button>
       </div>
-
-    
+      
+      <div class="mt-4">
+        <label for="aceptado" class="form-label h5">Aceptado o NO aceptado:</label>
+        <input type="text" class="form-control" id="aceptado" readonly>
+      </div>
+    </form>
   </div>
-</body>
-</html>
