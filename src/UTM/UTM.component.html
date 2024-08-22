@@ -4,45 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Máquina de Turing</title>
-    <link rel="stylesheet" href="UTM.css">
+    <link rel="stylesheet" href="UTM.component.css">
 </head>
 <body>
     <h1>Máquina de Turing</h1>
     
     <div class="input-group">
-        <label for="states">Estados (separados por comas):</label>
-        <input type="text" id="states">
+        <label for="estados">Estados (separados por comas):</label>
+        <input type="text" id="estados">
     </div>
     
     <div class="input-group">
-        <label for="alphabet">Alfabeto (separado por comas):</label>
-        <input type="text" id="alphabet">
+        <label for="alfabeto">Alfabeto (separado por comas):</label>
+        <input type="text" id="alfabeto">
     </div>
     
     <div class="input-group">
-        <label for="transitions">Función de transición (estado,símbolo,estado_siguiente,símbolo_escribir,dirección; separados por punto y coma):</label>
-        <input type="text" id="transitions">
+        <label for="transiciones">Función de transición (estado,símbolo,estado_siguiente,símbolo_escribir,dirección; separados por punto y coma):</label>
+        <input type="text" id="transiciones">
     </div>
     
     <div class="input-group">
-        <label for="initialState">Estado inicial:</label>
-        <input type="text" id="initialState">
+        <label for="estado_inicial">Estado inicial:</label>
+        <input type="text" id="estado_inicial">
     </div>
     
     <div class="input-group">
-        <label for="acceptingStates">Estados de aceptación (separados por comas):</label>
-        <input type="text" id="acceptingStates">
+        <label for="estados_de_aceptacion">Estados de aceptación (separados por comas):</label>
+        <input type="text" id="estados_de_aceptacion">
     </div>
     
     <div class="input-group">
-        <label for="inputString">Cadena de entrada:</label>
-        <input type="text" id="inputString">
+        <label for="cadena_de_entrada">Cadena de entrada:</label>
+        <input type="text" id="cadena_de_entrada">
     </div>
     
-    <button onclick="">Ejecutar</button>
+    <button (click)="ejecutar()">Ejecutar</button>
     
-    <h2 id="result"></h2>
-
-    <script src="UTM.js"></script>
+    <h2 id="resultado">{{resultado}}</h2> 
 </body>
 </html>

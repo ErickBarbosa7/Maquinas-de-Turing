@@ -3,72 +3,78 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-utm',
   templateUrl: './UTM.component.html',
-  styleUrls: ['./UTM.component.css']
+  styleUrls: ['./UTM.component.css']  
 })
 export class UTMComponent {
   estados: string[] = [];
   alfabeto: string[] = [];
-  transiciones: { [key: string]: any } = {};
+  transiciones: any[] = [];
   estadoInicial: string = '';
-  estadosAceptacion: string[] = [];
-  cadenaEntrada: string = '';
-  cinta: string[] = [];
-  posicionCabezal: number = 0;
-  estadoActual: string = '';
+  estadosDeAceptacion: string[] = [];
+  cadenaDeEntrada: string = '';
   resultado: string = '';
 
-  constructor() {}
+  constructor() { }
 
-  inicializar() {
-    this.cinta = this.cadenaEntrada.split('');
-    this.posicionCabezal = 0;
-    this.estadoActual = this.estadoInicial;
-  }
+  ngOnInit() { }
 
   ejecutar() {
-    this.inicializar();
-    let ramas: any[] = [{ estado: this.estadoActual, posicion: this.posicionCabezal, cinta: [...this.cinta] }];
-    
-    while (ramas.length > 0) {
-      const nuevaRama = ramas.pop();
-      const simboloActual = nuevaRama.cinta[nuevaRama.posicion] || '_';
-      const transicionesPosibles = this.transiciones[nuevaRama.estado] || [];
+    this.obtenerDatos();
+    console.log('Datos:', {
+      estados: this.estados,
+      alfabeto: this.alfabeto,
+      transiciones: this.transiciones,
+      estadoInicial: this.estadoInicial,
+      estadosDeAceptacion: this.estadosDeAceptacion,
+      cadenaDeEntrada: this.cadenaDeEntrada
+    });
+    this.resultado = this.simularMaquinaDeTuring();
+  }
 
-      for (const transicion of transicionesPosibles) {
-        if (transicion.simbolo === simboloActual) {
-          const nuevaCinta = [...nuevaRama.cinta];
-          nuevaCinta[nuevaRama.posicion] = transicion.nuevoSimbolo;
+  obtenerDatos() {
+    const estadosInput = (document.getElementById('estados') as HTMLInputElement).value;
+    const alfabetoInput = (document.getElementById('alfabeto') as HTMLInputElement).value;
+    const transicionesInput = (document.getElementById('transiciones') as HTMLInputElement).value;
+    const estadoInicialInput = (document.getElementById('estado_inicial') as HTMLInputElement).value;
+    const estadosDeAceptacionInput = (document.getElementById('estados_de_aceptacion') as HTMLInputElement).value;
+    const cadenaDeEntradaInput = (document.getElementById('cadena_de_entrada') as HTMLInputElement).value;
 
-          const nuevaPosicion = transicion.direccion === 'R' ? nuevaRama.posicion + 1 : nuevaRama.posicion - 1;
-          const nuevoEstado = transicion.nuevoEstado;
+    this.estados = estadosInput.split(',').map(s => s.trim());
+    this.alfabeto = alfabetoInput.split(',').map(s => s.trim());
+    this.transiciones = this.parseTransiciones(transicionesInput);
+    this.estadoInicial = estadoInicialInput.trim();
+    this.estadosDeAceptacion = estadosDeAceptacionInput.split(',').map(s => s.trim());
+    this.cadenaDeEntrada = cadenaDeEntradaInput.trim();
+  }
 
-          if (this.estadosAceptacion.includes(nuevoEstado)) {
-            this.resultado = 'Aceptado';
-            return;
-          }
+  parseTransiciones(input: string) {
+    return input.split(';').map(t => {
+      const [estado, simbolo, estadoSiguiente, simboloEscribir, direccion] = t.split(',').map(s => s.trim());
+      return { estado, simbolo, estadoSiguiente, simboloEscribir, direccion: direccion.toUpperCase() };
+    });
+  }
 
-          ramas.push({
-            estado: nuevoEstado,
-            posicion: nuevaPosicion,
-            cinta: nuevaCinta
-          });
-        }
+  simularMaquinaDeTuring() {
+    let cinta = ['_'].concat(this.cadenaDeEntrada.split(''), ['_']);
+    let cabeza = 1;
+    let estadoActual = this.estadoInicial;
+
+    while (!this.estadosDeAceptacion.includes(estadoActual)) {
+      const simboloActual = cinta[cabeza] || '_';
+      const transicion = this.transiciones.find(t => t.estado === estadoActual && t.simbolo === simboloActual);
+      if (!transicion) {
+        return 'Cadena rechazada (sin transiciones disponibles).';
+      }
+
+      cinta[cabeza] = transicion.simboloEscribir;
+      estadoActual = transicion.estadoSiguiente;
+      cabeza += transicion.direccion === 'R' ? 1 : -1;
+
+      if (cabeza < 0 || cabeza >= cinta.length) {
+        return 'Cadena rechazada (la cabeza se salió de la cinta).';
       }
     }
 
-    this.resultado = 'NO Aceptado';
-  }
-
-  limpiar() {
-    this.estados = [];
-    this.alfabeto = [];
-    this.transiciones = {};
-    this.estadoInicial = '';
-    this.estadosAceptacion = [];
-    this.cadenaEntrada = '';
-    this.cinta = [];
-    this.posicionCabezal = 0;
-    this.estadoActual = '';
-    this.resultado = '';
+    return 'Cadena aceptada.';
   }
 }
