@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-utm',
-  templateUrl: './UTM.component.html',
-  styleUrls: ['./UTM.component.css']  
+  templateUrl: './UTM.component.html'
 })
 export class UTMComponent {
   estados: string[] = [];
@@ -17,7 +16,12 @@ export class UTMComponent {
   constructor() { }
 
   ngOnInit() { }
+  selectedOption: string | null = null;
 
+  selectOption(option: string): void {
+    this.selectedOption = option;
+    console.log('Opción seleccionada:', option);
+  }
   ejecutar() {
     this.obtenerDatos();
     console.log('Datos:', {
