@@ -23,6 +23,8 @@ export class UTMComponent {
     console.log('Opción seleccionada:', option);
   }
   ejecutar() {
+    console.log("hola");
+    
     this.obtenerDatos();
     console.log('Datos:', {
       estados: this.estados,
