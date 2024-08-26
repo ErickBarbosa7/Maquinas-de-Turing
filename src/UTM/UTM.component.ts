@@ -12,17 +12,21 @@ export class UTMComponent {
   estadosDeAceptacion: string[] = [];
   cadenaDeEntrada: string = '';
   resultado: string = '';
-  caminos: any[] = []; // Array para almacenar los caminos de ejecución
+  caminos: any[] = []; 
+  selectedOption: string | null = null;
+  
+  visualizacionUniversal: boolean = false;
 
   constructor() { }
 
   ngOnInit() { }
-  
-  selectedOption: string | null = null;
 
   selectOption(option: string): void {
     this.selectedOption = option;
     console.log('Opción seleccionada:', option);
+
+    // Establece visualizacionUniversal basado en la opción seleccionada
+    this.visualizacionUniversal = option === 'opcion1';
   }
 
   ejecutar() {
@@ -89,13 +93,13 @@ export class UTMComponent {
       const simboloActual = cinta[cabeza] || '_';
       const transicion = this.transiciones.find(t => t.estado === estadoActual && t.simbolo === simboloActual);
       if (!transicion) {
-        return 'Cadena rechazada (sin transiciones disponibles).';
+        return 'Cadena rechazada sin transiciones disponibles.';
       }
       cinta[cabeza] = transicion.simboloEscribir;
       estadoActual = transicion.estadoSiguiente;
       cabeza += transicion.direccion === 'R' ? 1 : -1;
       if (cabeza < 0 || cabeza >= cinta.length) {
-        return 'Cadena rechazada (la cabeza se salió de la cinta).';
+        return 'Cadena rechazada';
       }
     }
 
@@ -162,6 +166,7 @@ export class UTMComponent {
     this.cadenaDeEntrada = '';
     this.resultado = '';
     this.caminos = [];
+    this.visualizacionUniversal = false;
 
     (document.getElementById('estados') as HTMLInputElement).value = '';
     (document.getElementById('alfabeto') as HTMLInputElement).value = '';

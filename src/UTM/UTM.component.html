@@ -8,87 +8,106 @@
       <li><a class="dropdown-item" (click)="selectOption('opcion2')">Máquina de Turing NO Determinista</a></li>
     </ul>
   </div>
+
   <div *ngIf="selectedOption === 'opcion1'">
     <div class="container mt-5">
       <h1 class="text-center mb-4">Máquina de Turing Universal</h1>
-    
+
       <div class="form-group">
         <label for="estados">Estados (separados por comas):</label>
         <input type="text" class="form-control" id="estados" placeholder="ej: q0,q1">
       </div>
-    
+
       <div class="form-group">
         <label for="alfabeto">Alfabeto (separado por comas):</label>
         <input type="text" class="form-control" id="alfabeto" placeholder="ej: 1,_">
       </div>
-    
+
       <div class="form-group">
         <label for="transiciones">Función de transición (estado,símbolo,estado_siguiente,símbolo_escribir,dirección; separados por punto y coma):</label>
         <input type="text" class="form-control" id="transiciones" placeholder="ej: q0,1,q1,_,L">
       </div>
-    
+
       <div class="form-group">
         <label for="estado_inicial">Estado inicial:</label>
         <input type="text" class="form-control" id="estado_inicial" placeholder="ej: q0">
       </div>
-    
+
       <div class="form-group">
         <label for="estados_de_aceptacion">Estados de aceptación (separados por comas):</label>
         <input type="text" class="form-control" id="estados_de_aceptacion" placeholder="ej: q1">
       </div>
-    
+
       <div class="form-group">
         <label for="cadena_de_entrada">Cadena de entrada:</label>
         <input type="text" class="form-control" id="cadena_de_entrada" placeholder="ej: 1">
       </div>
-    
+
       <div class="d-flex mt-3">
-        <button class="btn btn-primary me-2" (click)="ejecutar()">Ejecutar</button>
+        <button class="btn btn-primary me-2" (click)="ejecutar()">Simular</button>
         <button type="button" class="btn btn-warning" (click)="limpiar()">Limpiar</button>
       </div>
+
+      <div class="mt-4">
+        <h2 class="text-center">Visualización de la Ejecución</h2>
+        <div *ngIf="visualizacionUniversal; else noVisualizacion">
+          <div *ngFor="let visual of caminos">
+            <pre>{{ visual | json }}</pre>
       
-    
+        <ng-template #noVisualizacion>
+          <p>No hay visualizacion disponible</p>
+        </ng-template>
+      </div>
+      
+        </div>
+        <ng-template #noVisualizacion>
+          <p class="text-center">No se encontro visualización de la ejecucion</p>
+        </ng-template>
+      </div>
+
       <h2 class="text-center mt-4" id="resultado">{{resultado}}</h2>
     </div>
   </div>
+
   <div *ngIf="selectedOption === 'opcion2'">
     <div class="container mt-5">
       <h1 class="text-center mb-4">Máquina de Turing NO Determinista</h1>
-    
+
       <div class="form-group">
         <label for="estados">Estados (separados por comas):</label>
         <input type="text" class="form-control" id="estados" placeholder="ej: q0,q1">
       </div>
-    
+
       <div class="form-group">
         <label for="alfabeto">Alfabeto (separado por comas):</label>
         <input type="text" class="form-control" id="alfabeto" placeholder="ej: 1,_">
       </div>
-    
+
       <div class="form-group">
         <label for="transiciones">Función de transición (estado,símbolo,estado_siguiente,símbolo_escribir,dirección; separados por punto y coma):</label>
         <input type="text" class="form-control" id="transiciones" placeholder="ej: q0,1,q1,_,L">
       </div>
-    
+
       <div class="form-group">
         <label for="estado_inicial">Estado inicial:</label>
         <input type="text" class="form-control" id="estado_inicial" placeholder="ej: q0">
       </div>
-    
+
       <div class="form-group">
         <label for="estados_de_aceptacion">Estados de aceptación (separados por comas):</label>
         <input type="text" class="form-control" id="estados_de_aceptacion" placeholder="ej: q1">
       </div>
-    
+
       <div class="form-group">
         <label for="cadena_de_entrada">Cadena de entrada:</label>
         <input type="text" class="form-control" id="cadena_de_entrada" placeholder="ej: 1">
       </div>
-    
+
       <div class="d-flex mt-3">
-        <button class="btn btn-primary me-2" (click)="ejecutar()">Ejecutar</button>
+        <button class="btn btn-primary me-2" (click)="ejecutar()">Simular</button>
         <button type="button" class="btn btn-warning" (click)="limpiar()">Limpiar</button>
       </div>
+      
       <div class="mt-4">
         <h2 class="text-center">Posibles Caminos de Ejecución</h2>
         <div *ngIf="caminos.length > 0; else noCaminos">
@@ -97,10 +116,10 @@
           </div>
         </div>
         <ng-template #noCaminos> 
-          <p class="text-center">No se encontraron caminos de ejecución.</p>
+          <p class="text-center">No se encontraron caminos de ejecucion</p>
         </ng-template>
       </div>
-    
+
       <h2 class="text-center mt-4" id="resultado">{{resultado}}</h2>
     </div>
   </div>
