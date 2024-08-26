@@ -52,7 +52,46 @@
     </div>
   </div>
   <div *ngIf="selectedOption === 'opcion2'">
-    <h3>aqui va lo de gayo</h3>
-    <p>Este es el contenido que se muestra cuando se selecciona la Opción 2.</p>
+    <div class="container mt-5">
+      <h1 class="text-center mb-4">Máquina de Turing NO Determinista</h1>
+    
+      <div class="form-group">
+        <label for="estados">Estados (separados por comas):</label>
+        <input type="text" class="form-control" id="estados" placeholder="ej: q0,q1">
+      </div>
+    
+      <div class="form-group">
+        <label for="alfabeto">Alfabeto (separado por comas):</label>
+        <input type="text" class="form-control" id="alfabeto" placeholder="ej: 1,_">
+      </div>
+    
+      <div class="form-group">
+        <label for="transiciones">Función de transición (estado,símbolo,estado_siguiente,símbolo_escribir,dirección; separados por punto y coma):</label>
+        <input type="text" class="form-control" id="transiciones" placeholder="ej: q0,1,q1,_,L">
+      </div>
+    
+      <div class="form-group">
+        <label for="estado_inicial">Estado inicial:</label>
+        <input type="text" class="form-control" id="estado_inicial" placeholder="ej: q0">
+      </div>
+    
+      <div class="form-group">
+        <label for="estados_de_aceptacion">Estados de aceptación (separados por comas):</label>
+        <input type="text" class="form-control" id="estados_de_aceptacion" placeholder="ej: q1">
+      </div>
+    
+      <div class="form-group">
+        <label for="cadena_de_entrada">Cadena de entrada:</label>
+        <input type="text" class="form-control" id="cadena_de_entrada" placeholder="ej: 1">
+      </div>
+    
+      <div class="d-flex mt-3">
+        <button class="btn btn-primary me-2" (click)="ejecutar()">Ejecutar</button>
+        <button type="button" class="btn btn-warning" (click)="limpiar()">Limpiar</button>
+      </div>
+      
+    
+      <h2 class="text-center mt-4" id="resultado">{{resultado}}</h2>
+    </div>
   </div>
 </div>

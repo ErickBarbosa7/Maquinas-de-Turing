@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './UTM.component.html'
 })
 export class UTMComponent {
-  //Declaracion de las variables que se usaran
+  // Declaración de las variables que se usarán
   estados: string[] = [];
   alfabeto: string[] = [];
   transiciones: any[] = [];
@@ -14,22 +14,24 @@ export class UTMComponent {
   cadenaDeEntrada: string = '';
   resultado: string = '';
 
-  //constructor
+  // Constructor
   constructor() { }
 
-  //inicializador del componente
+  // Inicializador del componente
   ngOnInit() { }
   selectedOption: string | null = null;
 
-  //variable para almacenar la opcion seleccionada
+  // Variable para almacenar la opción seleccionada
   selectOption(option: string): void {
     this.selectedOption = option;
     console.log('Opción seleccionada:', option);
   }
+
+  // Método para ejecutar la simulación
   ejecutar() {
     console.log("hola");
     
-    //obtener los datos ingresados
+    // Obtener los datos ingresados
     this.obtenerDatos();
     console.log('Datos:', {
       estados: this.estados,
@@ -39,10 +41,17 @@ export class UTMComponent {
       estadosDeAceptacion: this.estadosDeAceptacion,
       cadenaDeEntrada: this.cadenaDeEntrada
     });
-    this.resultado = this.simularMaquinaDeTuring();
+
+    if (this.selectedOption === 'opcion1') {
+      this.resultado = this.simularMaquinaDeTuringUniversal();
+    } else if (this.selectedOption === 'opcion2') {
+      this.resultado = this.simularMaquinaDeTuringNoDeterminista();
+    } else {
+      this.resultado = 'Por favor, selecciona una opción válida.';
+    }
   }
 
-  //metodo para obtener los datos ingresados
+  // Método para obtener los datos ingresados
   obtenerDatos() {
     const estadosInput = (document.getElementById('estados') as HTMLInputElement).value;
     const alfabetoInput = (document.getElementById('alfabeto') as HTMLInputElement).value;
@@ -59,7 +68,7 @@ export class UTMComponent {
     this.cadenaDeEntrada = cadenaDeEntradaInput.trim();
   }
 
-  //metodo para convertir en un array de objetos
+  // Método para convertir en un array de objetos
   parseTransiciones(input: string) {
     return input.split(';').map(t => {
       const [estado, simbolo, estadoSiguiente, simboloEscribir, direccion] = t.split(',').map(s => s.trim());
@@ -67,13 +76,13 @@ export class UTMComponent {
     });
   }
 
-  //metodo para simular la maquina de turing
-  simularMaquinaDeTuring() {
+  // Método para simular la Máquina de Turing Universal
+  simularMaquinaDeTuringUniversal() {
     let cinta = ['_'].concat(this.cadenaDeEntrada.split(''), ['_']);
     let cabeza = 1;
     let estadoActual = this.estadoInicial;
 
-    //ejecuta hasta que llegue a un estado de aceptacion
+    // Ejecuta hasta que llegue a un estado de aceptación
     while (!this.estadosDeAceptacion.includes(estadoActual)) {
       const simboloActual = cinta[cabeza] || '_';
       const transicion = this.transiciones.find(t => t.estado === estadoActual && t.simbolo === simboloActual);
@@ -81,12 +90,12 @@ export class UTMComponent {
         return 'Cadena rechazada (sin transiciones disponibles).';
       }
 
-      //actualiza el estado de la cinta
+      // Actualiza el estado de la cinta
       cinta[cabeza] = transicion.simboloEscribir;
       estadoActual = transicion.estadoSiguiente;
       cabeza += transicion.direccion === 'R' ? 1 : -1;
 
-      //verificar si esta dentro de los limites
+      // Verificar si está dentro de los límites
       if (cabeza < 0 || cabeza >= cinta.length) {
         return 'Cadena rechazada (la cabeza se salió de la cinta).';
       }
@@ -95,7 +104,63 @@ export class UTMComponent {
     return 'Cadena aceptada.';
   }
 
-  //metodo para limpiar los campos
+  // Método para simular la Máquina de Turing No Determinista
+  simularMaquinaDeTuringNoDeterminista() {
+    // Configuración inicial
+    let cintas: { cinta: string[], cabeza: number, estado: string }[] = [{
+        cinta: ['_'].concat(this.cadenaDeEntrada.split(''), ['_']),
+        cabeza: 1,
+        estado: this.estadoInicial
+    }];
+    let configuracionesSiguientes: { cinta: string[], cabeza: number, estado: string }[] = [];
+
+    // Ejecuta hasta que se encuentre una configuración de aceptación o se agoten todas las configuraciones
+    while (cintas.length > 0) {
+        configuracionesSiguientes = [];
+
+        // Procesar todas las configuraciones actuales
+        for (let config of cintas) {
+            const simboloActual = config.cinta[config.cabeza] || '_';
+            const transiciones = this.transiciones.filter(t => t.estado === config.estado && t.simbolo === simboloActual);
+
+            if (transiciones.length === 0) {
+                continue;
+            }
+
+            // Aplicar todas las transiciones posibles
+            for (let transicion of transiciones) {
+                let nuevaCinta = [...config.cinta];
+                nuevaCinta[config.cabeza] = transicion.simboloEscribir;
+
+                let nuevaCabeza = config.cabeza + (transicion.direccion === 'R' ? 1 : -1);
+                if (nuevaCabeza < 0 || nuevaCabeza >= nuevaCinta.length) {
+                    continue;
+                }
+
+                configuracionesSiguientes.push({
+                    cinta: nuevaCinta,
+                    cabeza: nuevaCabeza,
+                    estado: transicion.estadoSiguiente
+                });
+            }
+        }
+
+        // Verificar si alguna de las configuraciones alcanza un estado de aceptación
+        for (let config of configuracionesSiguientes) {
+            if (this.estadosDeAceptacion.includes(config.estado)) {
+                return 'Cadena aceptada.';
+            }
+        }
+
+        // Actualizar configuraciones para la siguiente iteración
+        cintas = configuracionesSiguientes;
+    }
+
+    return 'Cadena rechazada.';
+}
+
+
+  // Método para limpiar los campos
   limpiar() {
     // Limpiar los campos 
     this.estados = [];
