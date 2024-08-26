@@ -25,7 +25,6 @@ export class UTMComponent {
     this.selectedOption = option;
     console.log('Opción seleccionada:', option);
 
-    // Establece visualizacionUniversal basado en la opción seleccionada
     this.visualizacionUniversal = option === 'opcion1';
   }
 
@@ -45,10 +44,10 @@ export class UTMComponent {
     } else if (this.selectedOption === 'opcion2') {
       const { resultado, caminos } = this.simularMaquinaDeTuringNoDeterminista();
       this.resultado = resultado;
-      this.caminos = caminos; // Almacena los caminos en el array
+      this.caminos = caminos; 
     } else {
-      this.resultado = 'Por favor, selecciona una opción válida.';
-      this.caminos = []; // Limpia los caminos
+      this.resultado = 'Selecciona una opcion valida';
+      this.caminos = []; 
     }
   }
 
@@ -72,12 +71,12 @@ export class UTMComponent {
     return input.split(';').map(t => {
       const partes = t.split(',').map(s => s.trim());
       if (partes.length !== 5) {
-        console.error('Transición mal formada:', t);
+        console.error('Transicion mal formada:', t);
         return null;
       }
       const [estado, simbolo, estadoSiguiente, simboloEscribir, direccion] = partes;
       if (!['L', 'R'].includes(direccion.toUpperCase())) {
-        console.error('Dirección no válida:', direccion);
+        console.error('Direccion no válida:', direccion);
         return null;
       }
       return { estado, simbolo, estadoSiguiente, simboloEscribir, direccion: direccion.toUpperCase() };
@@ -85,26 +84,49 @@ export class UTMComponent {
   }
 
   simularMaquinaDeTuringUniversal() {
+    if (this.estados.length === 0 || this.alfabeto.length === 0 || this.transiciones.length === 0) {
+      return 'No se puede simular, ingresa todos los datos';
+    }
+  
     let cinta = ['_'].concat(this.cadenaDeEntrada.split(''), ['_']);
     let cabeza = 1;
     let estadoActual = this.estadoInicial;
-
+    let caminos: any[] = [];
+  
     while (!this.estadosDeAceptacion.includes(estadoActual)) {
       const simboloActual = cinta[cabeza] || '_';
       const transicion = this.transiciones.find(t => t.estado === estadoActual && t.simbolo === simboloActual);
       if (!transicion) {
         return 'Cadena rechazada sin transiciones disponibles.';
       }
+  
+      // Registrar el estado actual
+      caminos.push({
+        cinta: [...cinta],
+        cabeza: cabeza,
+        estado: estadoActual
+      });
+  
       cinta[cabeza] = transicion.simboloEscribir;
       estadoActual = transicion.estadoSiguiente;
       cabeza += transicion.direccion === 'R' ? 1 : -1;
+  
       if (cabeza < 0 || cabeza >= cinta.length) {
         return 'Cadena rechazada';
       }
     }
-
+  
+    // Registrar el estado final
+    caminos.push({
+      cinta: [...cinta],
+      cabeza: cabeza,
+      estado: estadoActual
+    });
+  
+    this.caminos = caminos; // Actualizar caminos para visualización
     return 'Cadena aceptada.';
   }
+  
 
   simularMaquinaDeTuringNoDeterminista() {
     let cintas: { cinta: string[], cabeza: number, estado: string }[] = [{
@@ -141,7 +163,7 @@ export class UTMComponent {
           };
 
           configuracionesSiguientes.push(nuevaConfiguracion);
-          caminos.push(nuevaConfiguracion); // Añadir cada nueva configuración a los caminos
+          caminos.push(nuevaConfiguracion); 
         }
       }
 
@@ -157,6 +179,7 @@ export class UTMComponent {
     return { resultado: 'Cadena rechazada.', caminos };
   }
 
+  //funcion para el boton
   limpiar() {
     this.estados = [];
     this.alfabeto = [];
