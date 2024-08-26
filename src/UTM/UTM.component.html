@@ -89,7 +89,17 @@
         <button class="btn btn-primary me-2" (click)="ejecutar()">Ejecutar</button>
         <button type="button" class="btn btn-warning" (click)="limpiar()">Limpiar</button>
       </div>
-      
+      <div class="mt-4">
+        <h2 class="text-center">Posibles Caminos de Ejecución</h2>
+        <div *ngIf="caminos.length > 0; else noCaminos">
+          <div *ngFor="let camino of caminos">
+            <pre>{{ camino | json }}</pre>
+          </div>
+        </div>
+        <ng-template #noCaminos> 
+          <p class="text-center">No se encontraron caminos de ejecución.</p>
+        </ng-template>
+      </div>
     
       <h2 class="text-center mt-4" id="resultado">{{resultado}}</h2>
     </div>

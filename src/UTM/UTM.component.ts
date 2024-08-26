@@ -5,7 +5,6 @@ import { Component } from '@angular/core';
   templateUrl: './UTM.component.html'
 })
 export class UTMComponent {
-  // Declaración de las variables que se usarán
   estados: string[] = [];
   alfabeto: string[] = [];
   transiciones: any[] = [];
@@ -13,25 +12,20 @@ export class UTMComponent {
   estadosDeAceptacion: string[] = [];
   cadenaDeEntrada: string = '';
   resultado: string = '';
+  caminos: any[] = []; // Array para almacenar los caminos de ejecución
 
-  // Constructor
   constructor() { }
 
-  // Inicializador del componente
   ngOnInit() { }
+  
   selectedOption: string | null = null;
 
-  // Variable para almacenar la opción seleccionada
   selectOption(option: string): void {
     this.selectedOption = option;
     console.log('Opción seleccionada:', option);
   }
 
-  // Método para ejecutar la simulación
   ejecutar() {
-    console.log("hola");
-    
-    // Obtener los datos ingresados
     this.obtenerDatos();
     console.log('Datos:', {
       estados: this.estados,
@@ -45,13 +39,15 @@ export class UTMComponent {
     if (this.selectedOption === 'opcion1') {
       this.resultado = this.simularMaquinaDeTuringUniversal();
     } else if (this.selectedOption === 'opcion2') {
-      this.resultado = this.simularMaquinaDeTuringNoDeterminista();
+      const { resultado, caminos } = this.simularMaquinaDeTuringNoDeterminista();
+      this.resultado = resultado;
+      this.caminos = caminos; // Almacena los caminos en el array
     } else {
       this.resultado = 'Por favor, selecciona una opción válida.';
+      this.caminos = []; // Limpia los caminos
     }
   }
 
-  // Método para obtener los datos ingresados
   obtenerDatos() {
     const estadosInput = (document.getElementById('estados') as HTMLInputElement).value;
     const alfabetoInput = (document.getElementById('alfabeto') as HTMLInputElement).value;
@@ -68,34 +64,36 @@ export class UTMComponent {
     this.cadenaDeEntrada = cadenaDeEntradaInput.trim();
   }
 
-  // Método para convertir en un array de objetos
   parseTransiciones(input: string) {
     return input.split(';').map(t => {
-      const [estado, simbolo, estadoSiguiente, simboloEscribir, direccion] = t.split(',').map(s => s.trim());
+      const partes = t.split(',').map(s => s.trim());
+      if (partes.length !== 5) {
+        console.error('Transición mal formada:', t);
+        return null;
+      }
+      const [estado, simbolo, estadoSiguiente, simboloEscribir, direccion] = partes;
+      if (!['L', 'R'].includes(direccion.toUpperCase())) {
+        console.error('Dirección no válida:', direccion);
+        return null;
+      }
       return { estado, simbolo, estadoSiguiente, simboloEscribir, direccion: direccion.toUpperCase() };
-    });
+    }).filter(t => t !== null);
   }
 
-  // Método para simular la Máquina de Turing Universal
   simularMaquinaDeTuringUniversal() {
     let cinta = ['_'].concat(this.cadenaDeEntrada.split(''), ['_']);
     let cabeza = 1;
     let estadoActual = this.estadoInicial;
 
-    // Ejecuta hasta que llegue a un estado de aceptación
     while (!this.estadosDeAceptacion.includes(estadoActual)) {
       const simboloActual = cinta[cabeza] || '_';
       const transicion = this.transiciones.find(t => t.estado === estadoActual && t.simbolo === simboloActual);
       if (!transicion) {
         return 'Cadena rechazada (sin transiciones disponibles).';
       }
-
-      // Actualiza el estado de la cinta
       cinta[cabeza] = transicion.simboloEscribir;
       estadoActual = transicion.estadoSiguiente;
       cabeza += transicion.direccion === 'R' ? 1 : -1;
-
-      // Verificar si está dentro de los límites
       if (cabeza < 0 || cabeza >= cinta.length) {
         return 'Cadena rechazada (la cabeza se salió de la cinta).';
       }
@@ -104,65 +102,58 @@ export class UTMComponent {
     return 'Cadena aceptada.';
   }
 
-  // Método para simular la Máquina de Turing No Determinista
   simularMaquinaDeTuringNoDeterminista() {
-    // Configuración inicial
     let cintas: { cinta: string[], cabeza: number, estado: string }[] = [{
         cinta: ['_'].concat(this.cadenaDeEntrada.split(''), ['_']),
         cabeza: 1,
         estado: this.estadoInicial
     }];
     let configuracionesSiguientes: { cinta: string[], cabeza: number, estado: string }[] = [];
+    let caminos: any[] = [];
 
-    // Ejecuta hasta que se encuentre una configuración de aceptación o se agoten todas las configuraciones
     while (cintas.length > 0) {
-        configuracionesSiguientes = [];
+      configuracionesSiguientes = [];
+      for (let config of cintas) {
+        const simboloActual = config.cinta[config.cabeza] || '_';
+        const transiciones = this.transiciones.filter(t => t.estado === config.estado && t.simbolo === simboloActual);
 
-        // Procesar todas las configuraciones actuales
-        for (let config of cintas) {
-            const simboloActual = config.cinta[config.cabeza] || '_';
-            const transiciones = this.transiciones.filter(t => t.estado === config.estado && t.simbolo === simboloActual);
-
-            if (transiciones.length === 0) {
-                continue;
-            }
-
-            // Aplicar todas las transiciones posibles
-            for (let transicion of transiciones) {
-                let nuevaCinta = [...config.cinta];
-                nuevaCinta[config.cabeza] = transicion.simboloEscribir;
-
-                let nuevaCabeza = config.cabeza + (transicion.direccion === 'R' ? 1 : -1);
-                if (nuevaCabeza < 0 || nuevaCabeza >= nuevaCinta.length) {
-                    continue;
-                }
-
-                configuracionesSiguientes.push({
-                    cinta: nuevaCinta,
-                    cabeza: nuevaCabeza,
-                    estado: transicion.estadoSiguiente
-                });
-            }
+        if (transiciones.length === 0) {
+          continue;
         }
 
-        // Verificar si alguna de las configuraciones alcanza un estado de aceptación
-        for (let config of configuracionesSiguientes) {
-            if (this.estadosDeAceptacion.includes(config.estado)) {
-                return 'Cadena aceptada.';
-            }
-        }
+        for (let transicion of transiciones) {
+          let nuevaCinta = [...config.cinta];
+          nuevaCinta[config.cabeza] = transicion.simboloEscribir;
 
-        // Actualizar configuraciones para la siguiente iteración
-        cintas = configuracionesSiguientes;
+          let nuevaCabeza = config.cabeza + (transicion.direccion === 'R' ? 1 : -1);
+          if (nuevaCabeza < 0 || nuevaCabeza >= nuevaCinta.length) {
+            continue;
+          }
+
+          const nuevaConfiguracion = {
+            cinta: nuevaCinta,
+            cabeza: nuevaCabeza,
+            estado: transicion.estadoSiguiente
+          };
+
+          configuracionesSiguientes.push(nuevaConfiguracion);
+          caminos.push(nuevaConfiguracion); // Añadir cada nueva configuración a los caminos
+        }
+      }
+
+      for (let config of configuracionesSiguientes) {
+        if (this.estadosDeAceptacion.includes(config.estado)) {
+          return { resultado: 'Cadena aceptada.', caminos };
+        }
+      }
+
+      cintas = configuracionesSiguientes;
     }
 
-    return 'Cadena rechazada.';
-}
+    return { resultado: 'Cadena rechazada.', caminos };
+  }
 
-
-  // Método para limpiar los campos
   limpiar() {
-    // Limpiar los campos 
     this.estados = [];
     this.alfabeto = [];
     this.transiciones = [];
@@ -170,6 +161,7 @@ export class UTMComponent {
     this.estadosDeAceptacion = [];
     this.cadenaDeEntrada = '';
     this.resultado = '';
+    this.caminos = [];
 
     (document.getElementById('estados') as HTMLInputElement).value = '';
     (document.getElementById('alfabeto') as HTMLInputElement).value = '';
