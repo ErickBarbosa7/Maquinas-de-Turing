@@ -55,9 +55,6 @@ El objetivo de este proyecto es simular el comportamiento de dos tipos de Máqui
 5. Observa la visualización del proceso y el resultado de la simulación.
 
 ---
-
-Este README proporciona una guía completa sobre cómo entender, instalar y utilizar tu proyecto de simulador de Máquinas de Turing. Puedes copiar y pegar este contenido en tu archivo `README.md`. Si necesitas alguna modificación o más información, estoy aquí para ayudarte.
-
 # ProjectTest
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.2.
