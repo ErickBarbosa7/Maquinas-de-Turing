@@ -49,13 +49,13 @@
       </div>
 
       <div class="mt-4">
-        <h2 class="text-center">Visualización de la Ejecución</h2>
+        <h2 class="text-center">Posibles Caminos de Ejecución</h2>
         <div *ngIf="visualizacionUniversal; else noVisualizacion">
           <div *ngFor="let visual of caminos">
             <pre>{{ visual | json }}</pre>
       
-        <ng-template #noVisualizacion>
-          <p>No hay visualizacion disponible</p>
+        <ng-template #noCaminos> 
+              <p>No hay visualizacion disponible</p>
         </ng-template>
       </div>
       
@@ -116,7 +116,7 @@
           </div>
         </div>
         <ng-template #noCaminos> 
-          <p class="text-center">Visualización de la Ejecución</p>
+          <p>No hay visualizacion disponible</p>
         </ng-template>
       </div>
 
