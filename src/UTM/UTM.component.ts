@@ -239,7 +239,6 @@ export class UTMComponent {
     this.cadenaDeEntrada = '';
     this.resultado = '';
     this.caminos = [];
-    this.selectedOption = null;
     this.visualizacionUniversal = false;
     (document.getElementById('estados') as HTMLInputElement).value = '';
     (document.getElementById('alfabeto') as HTMLInputElement).value = '';
