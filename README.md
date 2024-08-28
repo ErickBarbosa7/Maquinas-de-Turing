@@ -37,7 +37,7 @@ El objetivo de este proyecto es simular el comportamiento de dos tipos de Máqui
 ## Instrucciones de Instalación
 
 1. **Clona el repositorio**: 
-   git clone [URL_DEL_REPOSITORIO]
+   git clone https://github.com/ErickBarbosa7/Maquinas-de-Turing.git
 2. **Navega al directorio del proyecto**:
    cd nombre del proyecto
 3. Instala las dependencias
