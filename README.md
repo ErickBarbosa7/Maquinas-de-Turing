@@ -27,12 +27,12 @@ El objetivo de este proyecto es simular el comportamiento de dos tipos de Máqui
 
 ## Cómo Ingresar los Datos
 
-1. **Estados**: Ingrese los estados separados por comas, por ejemplo: `q0,q1,q2`.
-2. **Alfabeto**: Ingrese los símbolos del alfabeto separados por comas, por ejemplo: `1,_`.
-3. **Función de Transición**: Ingrese las transiciones en el formato `estado,símbolo,estado_siguiente,símbolo_escribir,dirección;`, por ejemplo: `q0,1,q1,_,L`.
+1. **Estados**: Ingrese los estados separados por comas, por ejemplo: `q0,q1`.
+2. **Alfabeto**: Ingrese los símbolos del alfabeto separados por comas, por ejemplo: `0,1`.
+3. **Función de Transición**: Ingrese las transiciones en el formato `estado,símbolo,estado_siguiente,símbolo_escribir,dirección;`, por ejemplo: `q0,0,q1,1,R;q1,1,q0,0,L`.
 4. **Estado Inicial**: Ingrese el estado inicial, por ejemplo: `q0`.
-5. **Estados de Aceptación**: Ingrese los estados de aceptación separados por comas, por ejemplo: `q2`.
-6. **Cadena de Entrada**: Ingrese la cadena de entrada que será procesada por la máquina, por ejemplo: `111`.
+5. **Estados de Aceptación**: Ingrese los estados de aceptación separados por comas, por ejemplo: `q0`.
+6. **Cadena de Entrada**: Ingrese la cadena de entrada que será procesada por la máquina, por ejemplo: `01`.
 
 ## Instrucciones de Instalación
 
