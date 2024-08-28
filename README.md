@@ -36,6 +36,9 @@ El objetivo de este proyecto es simular el comportamiento de dos tipos de Máqui
 
 ## Instrucciones de Instalación
 
+Se puede entrar directamente al simulador en:
+https://maquinasturing2.netlify.app/
+
 1. **Clona el repositorio**: 
    git clone https://github.com/ErickBarbosa7/Maquinas-de-Turing.git
 2. **Navega al directorio del proyecto**:
